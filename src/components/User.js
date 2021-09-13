@@ -9,7 +9,7 @@ const User = () => {
   const [uniqueData, setUniqueData] = useState([]);
   const [peopleNumber, setPeopleNumber] = useState();
 
-  const getUserData = () => {
+  const getUserData = async () => {
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
@@ -22,6 +22,12 @@ const User = () => {
     getUserData();
   }, []);
 
+  function getUniqueData(data) {
+    if (uniqueData.indexOf(data.location.country) === -1) {
+      uniqueData.push(data.location.country);
+    }
+  }
+
   return (
     <table>
       <tbody>
@@ -29,12 +35,7 @@ const User = () => {
           <td>Country</td>
           <td>Total People</td>
         </tr>
-        {userData.map((data) => {
-          if (uniqueData.indexOf(data.location.country) === -1) {
-            uniqueData.push(data.location.country);
-          }
-          console.log(uniqueData);
-        })}
+        {userData.map(getUniqueData)}
 
         {uniqueData.map((data, index) => (
           <tr key={index}>
